@@ -10,16 +10,17 @@ def show():
 #grab information such as width, height, etc.
 def imageProcess():
 	width, height = image.size
+	bright_max = []
 	print("Width:", width, "\nHeight:", height)
 	#load the jpg information into a 2d numpy array
 	im_data = np.array(image)
-	print(im_data)
-
 	#iterate through pixel data
 	for x in range(width):
 		for y in range(height):
 			pixel = im_data[x][y]
+			bright_max.append((pixel[0]+pixel[1]+pixel[2])/3)
 			print(pixel)
+			print("Brightness avg:", bright_max[y])
 	return 
 
 
