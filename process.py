@@ -1,41 +1,37 @@
 import PIL
 import numpy as np
 from PIL import Image 
-
-bright_max = np.array([])
-#print image funciton
-
-def show():
-	image.show()
-
-#grab information such as width, height, etc.
-def imageProcess(width, height):
-
-	pixel = np.array([],[])
-	new_array = np.array([])
-	print("Width:", width, "\nHeight:", height)
-	#load the jpg information into a 2d numpy array
-	im_data = np.array(image)
-
-	#iterate through pixel data
-	for x in range(height-1):
-		for y in range(width-1):
-			pixel = im_data[x][y]
-			bright_max = (0.2126*pixel[0]) + (0.7152*pixel[1])+(0.0722*pixel[2])
-			print(bright_max)
-		return np.prod(bright_max.shape)
-
-
-
+#python numpy array [row, col]
+#row = height
+#col = width
+image = Image.open('images\img4.jpg')
+ascii_string = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+brightnessBuffer = np.empty([image.size[0]*image.size[1]])
+pixel = np.array([])
+im_data = np.array(image)
+outputBuffer = np.empty([image.size[0]*image.size[1]])
+def imageProcess(count, row, col):
+	pixel = im_data[row][col]
+	brightnessBuffer[count] = (0.21*pixel[0])+(0.72*pixel[1])+(0.07*pixel[2])
+	#print(int(brightnessBuffer[count]))
+	ascii_conv = int(brightnessBuffer[count]/4)
+	outputBuffer[row,col] = ascii_string[ascii_conv]
+	return 
 if __name__ == '__main__':
 	#read in the image and display the image. 
 	try:
-		image = Image.open('images\img1.jpg')
-		width, height = image.size		
+		i,x,y = 0,0,0
+
+		width, height = image.size
+		ascii_image = np.array([])		
+		print("Width:", width, "\nHeight:", height)
 		print('Successfully loaded image!')
-		print(imageProcess(width, height))
-		#for i in len(bright_max):
-			#print(bright_max[i])		
+		for x in range(height):
+			for y in range(width):
+				imageProcess(i,x,y)
+				i+=1
+
+		print(outputBuffer)
 	except IOError:
 		print('An error occured trying to open the file.')
 
