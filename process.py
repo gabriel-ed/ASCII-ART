@@ -1,37 +1,59 @@
+#PROJECT: JPG TO ASCII IMAGE CONVERTER
+#CREATOR: GABRIEL SMITH
+#LIBRARIES USED: NUMPY, PILLOW
+#DATE: 10/4/2019
+
 import PIL
 import numpy as np
 from PIL import Image 
-#print image funciton
 
-pixel = np.array([],[])
-def show():
-	image.show()
+#row = height
+#col = width
+# -------------------------- GLOBAL VALUES ------------------------------
 
-#grab information such as width, height, etc.
-def imageProcess():
-	width, height = image.size
-	bright_max = []
-	print("Width:", width, "\nHeight:", height)
-	#load the jpg information into a 2d numpy array
+
+ascii_string = "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+pixel = np.array([])
+outputBuffer = ""
+
+def imageOpen():
+	image = Image.open('images\img1.jpg')
+	return image
+
+# -------------------------- IMAGE PROCESSING --------------------------
+def pixelProcess(count, row, col,brightnessBuffer,image):
 	im_data = np.array(image)
-	#iterate through pixel data
-	for x in range(width):
-		for y in range(height):
-			pixel = im_data[x][y]
-			bright_max.append((pixel[0]+pixel[1]+pixel[2])/3)
-			print(pixel)
-			print("Brightness avg:", bright_max[y])
-	return 
+	pixel = im_data[row][col]
+	new_arr = ""
+	brightnessBuffer[count] = (0.21*pixel[0])+(0.72*pixel[1])+(0.07*pixel[2])
+	ascii_conv = int(brightnessBuffer[count]/4)
+	new_arr += ascii_string[ascii_conv]
+	return new_arr
 
-
+# -------------------------- MAIN PROCEDURE -----------------------------
 
 if __name__ == '__main__':
-	#read in the image and display the image. 
 	try:
-		image = Image.open('images\img1.jpg')
+		image = imageOpen()
 		print('Successfully loaded image!')
-		imageProcess()
+
+		brightnessBuffer = np.empty([image.size[0]*image.size[1]])
+		i,x,y = 0,0,0
+		width, height = image.size
+		ascii_image = np.array([])		
+
+		for x in range(height):
+			for y in range(width):
+				if(y%width==0):
+					outputBuffer+='\n'
+				outputBuffer+=pixelProcess(i,x,y,brightnessBuffer,image)
+
+				i+=1
+		print(outputBuffer)
+		output_file = open("Output.txt", "w")
+		output_file.write(outputBuffer)
+		output_file.close()		
 	except IOError:
-		print('An error occured trying to open the file.')
+		print('An error occured when attempting to open the file.')
 
 
