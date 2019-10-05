@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 				i+=1
 		print(outputBuffer)
-		output_file = open("Output.txt", "w")
+		output_file = open("sampleOutput.txt", "w")
 		output_file.write(outputBuffer)
 		output_file.close()		
 	except IOError:
